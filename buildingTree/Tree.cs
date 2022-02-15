@@ -1,154 +1,160 @@
-﻿/*using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BuildingTree
 {
-  class Tree
+  public class Tree
   {
     private Node firstNode;
     static public int nesting = 0;
     static public int maxNesting = 0;
-
     public Tree()
     {
       firstNode = null;
     }
-    public Node GetNode()
-    {
-      return firstNode;
-    }
     public void Add(int data)
     {
-      if (firstNode.GetParent() == null && GetLeft() == null && GetRight() == null && GetData() == FirstNode)
+      AddInner(data, firstNode);
+    }
+    private void AddInner(int data, Node currentNode)
+    {
+      if (currentNode == null)
       {
-        SetData(data);
+        this.firstNode = new Node();
+        this.firstNode.SetData(data);
       }
-      if (GetData() != FirstNode)
+      if (currentNode != null)
       {
-        if (data < GetData())
+        if (data < currentNode.GetData())
         {
-          if (GetLeft() != null)
+          if (currentNode.GetLeft() != null)
           {
-            GetLeft().Add(data);
+            //currentNode.GetLeft().Add(data);
+            AddInner(data, currentNode.GetLeft());
           }
-          if (GetLeft() == null)
+          if (currentNode.GetLeft() == null)
           {
-            SetLeft(new Node());
-            GetLeft().SetData(data);
-            GetLeft().SetParent(this);
+            currentNode.SetLeft(new Node());
+            currentNode.GetLeft().SetData(data);
+            currentNode.GetLeft().SetParent(currentNode);
           }
         }
-        if (data > GetData())
+        if (data > currentNode.GetData())
         {
-          if (GetRight() != null)
+          if (currentNode.GetRight() != null)
           {
-            GetRight().Add(data);
+            //firstNode.GetRight().Add(data);
+            AddInner(data, currentNode.GetRight());
           }
-          if (GetRight() == null)
+          if (currentNode.GetRight() == null)
           {
-            SetRight(new Node());
-            GetRight().SetData(data);
-            GetRight().SetParent(this);
+            currentNode.SetRight(new Node());
+            currentNode.GetRight().SetData(data);
+            currentNode.GetRight().SetParent(currentNode);
           }
         }
       }
     }
     public void DeleteElement(int data)
     {
-      if (GetData() != data)
+      DeleteElementInner(data, firstNode);
+    }
+    private void DeleteElementInner(int data, Node currentNode)
+    {
+      if (currentNode.GetData() != data)
       {
-        if (GetLeft() != null)
+        if (currentNode.GetLeft() != null)
         {
-          GetLeft().DeleteElement(data);
+          DeleteElementInner(data, currentNode.GetLeft());
         }
-        if (GetRight() != null)
+        if (currentNode.GetRight() != null)
         {
-          GetRight().DeleteElement(data);
+          DeleteElementInner(data, currentNode.GetRight());
         }
       }
-      if (GetData() == data)
+      if (currentNode.GetData() == data)
       {
-        if (GetRight() == null && GetLeft() == null)
+        if (currentNode.GetRight() == null && currentNode.GetLeft() == null)
         {
-          if (GetParent() != null)
+          if (firstNode != currentNode)
           {
-            if (GetParent().GetLeft() != null && GetParent().GetLeft().GetData() == data)
+            if (currentNode.GetParent().GetLeft() != null && currentNode.GetParent().GetLeft().GetData() == data)
             {
-              GetParent().SetLeft(null);
+              currentNode.GetParent().SetLeft(null);
             }
-            if (GetParent().GetRight() != null && GetParent().GetRight().GetData() == data)
+            if (currentNode.GetParent().GetRight() != null && currentNode.GetParent().GetRight().GetData() == data)
             {
-              GetParent().SetRight(null);
+              currentNode.GetParent().SetRight(null);
             }
           }
-          if (GetParent() == null)
+          if (firstNode == currentNode)
           {
-            SetData(0);
+            firstNode.SetData(0);
           }
         }
-        if (GetRight() == null && GetLeft() != null)
+        if (currentNode.GetRight() == null && currentNode.GetLeft() != null)
         {
-          if (GetParent() != null)
+          if (firstNode != currentNode)
           {
-            if (GetParent().GetLeft() != null)
+            if (currentNode.GetParent().GetLeft() != null)
             {
-              if (GetParent().GetLeft().GetData() == data)
+              if (currentNode.GetParent().GetLeft().GetData() == data)
               {
-                GetParent().SetLeft(GetLeft());
-                GetLeft().SetParent(GetParent());
+                currentNode.GetParent().SetLeft(currentNode.GetLeft());
+                currentNode.GetLeft().SetParent(currentNode.GetParent());
               }
             }
-            if (GetParent().GetRight() != null)
+            if (currentNode.GetParent().GetRight() != null)
             {
-              if (GetParent().GetRight().GetData() == data)
+              if (currentNode.GetParent().GetRight().GetData() == data)
               {
-                GetParent().SetRight(GetLeft());
-                GetLeft().SetParent(GetParent());
+                currentNode.GetParent().SetRight(currentNode.GetLeft());
+                currentNode.GetLeft().SetParent(currentNode.GetParent());
               }
             }
           }
-          if (GetParent() == null)
+          if (firstNode == currentNode)
           {
-            SetData(GetLeft().GetData());
-            SetLeft(GetLeft().GetLeft());
-            SetRight(GetLeft().GetRight());
+            currentNode.SetData(currentNode.GetLeft().GetData());
+            currentNode.SetRight(currentNode.GetLeft().GetRight());
+            currentNode.SetLeft(currentNode.GetLeft().GetLeft());
           }
         }
-        if (GetRight() != null && GetLeft() == null)
+        if (currentNode.GetRight() != null && currentNode.GetLeft() == null)
         {
-          if (GetParent() != null)
+          if (firstNode != currentNode)
           {
-            if (GetParent().GetLeft() != null)
+            if (currentNode.GetParent().GetLeft() != null)
             {
-              if (GetParent().GetLeft().GetData() == data)
+              if (currentNode.GetParent().GetLeft().GetData() == data)
               {
-                GetParent().SetLeft(GetRight());
-                GetRight().SetParent(GetParent());
+                currentNode.GetParent().SetLeft(currentNode.GetRight());
+                currentNode.GetRight().SetParent(currentNode.GetParent());
               }
             }
-            if (GetParent().GetRight() != null)
+            if (currentNode.GetParent().GetRight() != null)
             {
-              if (GetParent().GetRight().GetData() == data)
+              if (currentNode.GetParent().GetRight().GetData() == data)
               {
-                GetParent().SetRight(GetRight());
-                GetRight().SetParent(GetParent());
+                currentNode.GetParent().SetRight(currentNode.GetRight());
+                currentNode.GetRight().SetParent(currentNode.GetParent());
               }
             }
           }
-          if (GetParent() == null)
+          if (firstNode == currentNode)
           {
-            SetData(GetRight().GetData());
-            SetLeft(GetRight().GetLeft());
-            SetRight(GetRight().GetRight());
+            currentNode.SetData(currentNode.GetRight().GetData());
+            currentNode.SetLeft(currentNode.GetRight().GetLeft());
+            currentNode.SetRight(currentNode.GetRight().GetRight());
           }
         }
-        if (GetRight() != null && GetLeft() != null)
+        if (currentNode.GetRight() != null && currentNode.GetLeft() != null)
         {
-          if (GetParent() != null)
+          if (currentNode != firstNode)
           {
-            var lowestElement = FindNext();
-            SetData(lowestElement.GetData());
+            var lowestElement = FindNext(currentNode);
+            currentNode.SetData(lowestElement.GetData());
             if (lowestElement.GetRight() == null)
             {
               if (lowestElement.GetParent().GetLeft() != null && lowestElement.GetParent().GetLeft().GetData() == lowestElement.GetData())
@@ -174,12 +180,12 @@ namespace BuildingTree
               }
             }
           }
-          if (GetParent() == null)
+          if (firstNode == currentNode)
           {
             var arrayList = PreOrder();
-            arrayList.Remove(GetData());
-            arrayList.Remove(GetRight().GetData());
-            arrayList.Insert(0, GetRight().GetData());
+            arrayList.Remove(currentNode.GetData());
+            arrayList.Remove(currentNode.GetRight().GetData());
+            arrayList.Insert(0, currentNode.GetRight().GetData());
             ClearTree();
             for (int i = 0; i < arrayList.Count; i++)
             {
@@ -188,72 +194,84 @@ namespace BuildingTree
           }
         }
       }
+      if(firstNode.GetRight() == null && firstNode.GetLeft() == null && firstNode.GetData() == 0)
+      {
+        ClearTree();
+      }
     }
     public List<int> PreOrder()
     {
       List<int> arrayList = new List<int>();
-      PreOrderInner(arrayList);
+      PreOrderInner(arrayList, firstNode);
       return arrayList;
     }
     public List<int> InOrder()
     {
       List<int> arrayList = new List<int>();
-      InOrderInner(arrayList);
+      InOrderInner(arrayList, firstNode);
       return arrayList;
     }
     public List<int> PostOrder()
     {
       List<int> arrayList = new List<int>();
-      PostOrderInner(arrayList);
+      PostOrderInner(arrayList, firstNode);
       return arrayList;
     }
-    private void PreOrderInner(List<int> listArray)
+    private void PreOrderInner(List<int> listArray, Node currentNode)
     {
-      listArray.Add(GetData());
-      if (GetLeft() != null)
+      listArray.Add(currentNode.GetData());
+      if (currentNode.GetLeft() != null)
       {
-        GetLeft().PreOrderInner(listArray);
+        PreOrderInner(listArray, currentNode.GetLeft());
       }
-      if (GetRight() != null)
+      if (currentNode.GetRight() != null)
       {
-        GetRight().PreOrderInner(listArray);
+        PreOrderInner(listArray, currentNode.GetRight());
       }
     }
-    private void InOrderInner(List<int> listArray)
+    private void InOrderInner(List<int> listArray, Node currentNode)
     {
-      if (GetLeft() != null)
+      if (currentNode.GetLeft() != null)
       {
-        GetLeft().PreOrderInner(listArray);
+        InOrderInner(listArray, currentNode.GetLeft()); 
       }
-      listArray.Add(GetData());
-      if (GetRight() != null)
+      listArray.Add(currentNode.GetData());
+      if (currentNode.GetRight() != null)
       {
-        GetRight().PreOrderInner(listArray);
+        InOrderInner(listArray, currentNode.GetRight());
       }
     }
-    private void PostOrderInner(List<int> listArray)
+    private void PostOrderInner(List<int> listArray, Node currentNode)
     {
-      if (GetLeft() != null)
+      if (currentNode.GetLeft() != null)
       {
-        GetLeft().PreOrderInner(listArray);
+        PostOrderInner(listArray, currentNode.GetLeft());
       }
-      if (GetRight() != null)
+      if (currentNode.GetRight() != null)
       {
-        GetRight().PreOrderInner(listArray);
+        PostOrderInner(listArray, currentNode.GetRight());
       }
-      listArray.Add(GetData());
+      listArray.Add(currentNode.GetData());
     }
     public Node FindMinimum()
     {
-      if (GetLeft() == null)
-      {
-        return this;
-      }
-      return GetLeft().FindMinimum();
+      return FindMinimumInner(firstNode);
     }
-    public Node FindNext()
+    private Node FindMinimumInner(Node currentNode)
     {
-      return GetRight().FindMinimum();
+      if (currentNode.GetLeft() == null)
+      {
+        return currentNode;
+      }
+      return FindMinimumInner(currentNode.GetLeft());
+    }
+    public Node FindNext(Node currentNode)
+    {
+      return FindNextInner(currentNode);
+    }
+    private Node FindNextInner(Node currentNode)
+    {
+      return FindMinimumInner(currentNode.GetRight());
     }
     public void ShowBinaryTree()
     {
@@ -264,9 +282,9 @@ namespace BuildingTree
       {
         treeInString[i] = "";
       }
-      ShowBinaryTreeInner(treeInString);
+      ShowBinaryTreeInner(treeInString, firstNode);
     }
-    private void ShowBinaryTreeInner(string[] treeInString)
+    private void ShowBinaryTreeInner(string[] treeInString, Node currentNode)
     {
       int countOfNumbersOnLastLayer = Convert.ToInt32(Math.Pow(2.0, Convert.ToDouble(maxNesting)));
       int countOfNumbersOnLayer = Convert.ToInt32(Math.Pow(2.0, Convert.ToDouble(nesting)));
@@ -285,14 +303,15 @@ namespace BuildingTree
           treeInString[nesting] += " ";
         }
       }
-      treeInString[nesting] += GetData();
-      if (GetLeft() != null)
+      treeInString[nesting] += currentNode.GetData();
+      if (currentNode.GetLeft() != null)
       {
         nesting++;
-        GetLeft().ShowBinaryTreeInner(treeInString);
+        ShowBinaryTreeInner(treeInString, currentNode.GetLeft());
+        //firstNode.GetLeft().ShowBinaryTreeInner(treeInString);
         nesting--;
       }
-      if (GetLeft() == null && nesting != maxNesting)
+      if (currentNode.GetLeft() == null && nesting != maxNesting)
       {
         for (int i = nesting + 1; i < maxNesting + 1; i++)
         {
@@ -319,13 +338,14 @@ namespace BuildingTree
           }
         }
       }
-      if (GetRight() != null)
+      if (currentNode.GetRight() != null)
       {
         nesting++;
-        GetRight().ShowBinaryTreeInner(treeInString);
+        ShowBinaryTreeInner(treeInString, currentNode.GetRight());
+        //firstNode.GetRight().ShowBinaryTreeInner(treeInString);
         nesting--;
       }
-      if (GetRight() == null && nesting != maxNesting)
+      if (currentNode.GetRight() == null && nesting != maxNesting)
       {
         for (int i = nesting + 1; i < maxNesting + 1; i++)
         {
@@ -362,26 +382,32 @@ namespace BuildingTree
     }
     public void DepthOfTree()
     {
+      DepthOfTreeInner(firstNode);
+    }
+    private void DepthOfTreeInner(Node currentNode)
+    {
       if (maxNesting < nesting)
       {
         maxNesting = nesting;
       }
-      if (GetLeft() != null)
+      if (currentNode.GetLeft() != null)
       {
         nesting++;
-        GetLeft().DepthOfTree();
+        DepthOfTreeInner(currentNode.GetLeft());
+        //firstNode.GetLeft().DepthOfTree();
         nesting--;
       }
-      if (GetRight() != null)
+      if (currentNode.GetRight() != null)
       {
         nesting++;
-        GetRight().DepthOfTree();
+        DepthOfTreeInner(currentNode.GetRight());
+        //firstNode.GetRight().DepthOfTree();
         nesting--;
       }
     }
     public bool EmptyTree()
     {
-      if (GetLeft() == null && GetRight() == null && GetData() == FirstNode)
+      if (firstNode == null)
       {
         return true;
       }
@@ -392,10 +418,7 @@ namespace BuildingTree
     }
     public void ClearTree()
     {
-      SetLeft(null);
-      SetRight(null);
-      SetData(FirstNode);
+      firstNode = null;
     }
   }
 }
-*/

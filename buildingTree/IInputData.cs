@@ -1,64 +1,51 @@
-﻿using System;
+﻿using BuildingTree;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
 namespace BuildingTree
 {
-  class File
+  public interface IInputData
   {
-    static public void SaveInFile(Tree binaryTree)
-    {
-      string path = "";
-      do
-      {
-        Console.WriteLine("Please enter path to file");
-        path = Console.ReadLine();
-        FileInfo tempFile = new FileInfo(path);
-        if (!tempFile.Exists)
-        {
-          try
-          {
-            StreamWriter newFile = new StreamWriter(path);
-            newFile.Close();
-          }
-          catch
-          {
-            Console.WriteLine("Bad name for file, please try again");
-            continue;
-          }
-        }
-        if (tempFile.Exists)
-        {
-          if (tempFile.IsReadOnly)
-          {
-            Console.WriteLine("Something wrong with file. please try again");
-            continue;
-          }
-          else
-          {
-            Console.WriteLine("Do you want to rewrite file?" + Environment.NewLine + "1 - Yes");
-            if (Input.GetInt() != 1)
-            {
-              continue;
-            }
-          }
-        }
-        tempFile.Delete();
-        break;
-      }
-      while (true);
+     Tree input();
+  }
 
-      List<int> array = binaryTree.PreOrder();
-      StreamWriter file = new StreamWriter(path);
-      for (int i = 0; i < array.Count; i++)
+  public class RandomInput : IInputData
+  {
+    const int LowerLimit = 5;
+    const int UpperLimit = 12;
+    static Random rnd = new Random();
+    public Tree input()
+    {
+      Tree binaryTree = new Tree();
+      int countOfNUmbers = rnd.Next(LowerLimit, UpperLimit);
+      int[] array = new int[countOfNUmbers];
+      for (int i = 0; i < countOfNUmbers; i++)
       {
-        file.WriteLine(array[i].ToString());
+        array[i] = i + 1;
       }
-      file.Close();
-      Console.WriteLine("File saved");
+      int n = countOfNUmbers;
+      while (n > 1)
+      {
+        n--;
+        int f = rnd.Next(n + 1);
+        int value = array[f];
+        array[f] = array[n];
+        array[n] = value;
+      }
+      for (int i = 0; i < countOfNUmbers; i++)
+      {
+        binaryTree.Add(array[i]);
+      }
+      binaryTree.ShowBinaryTree();
+      return binaryTree;
     }
-    static public Tree GetDataFromFile()
+  }
+
+  public class FileInput : IInputData
+  {
+    public Tree input()
     {
       Tree binaryTree = new Tree();
       string path;

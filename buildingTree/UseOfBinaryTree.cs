@@ -15,7 +15,7 @@ namespace BuildingTree
       SaveData,
       GoBack
     }
-    public static void Interact(Node binaryTree)
+    public static void Interact(Tree binaryTree)
     {
       Interaction choice;
       do
