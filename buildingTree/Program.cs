@@ -17,7 +17,17 @@ namespace BuildingTree
       {
         Console.WriteLine(Environment.NewLine + Environment.NewLine +"1 - Console input" + Environment.NewLine
           + "2 - File input" + Environment.NewLine + "3 - Random input" + Environment.NewLine + "4 - End program");
-        IInputData someInput = GetInput.GetSomeInput(Input.GetInt());
+        var choice = Input.GetInt();
+        if((GetInput.UserChoice)choice < GetInput.UserChoice.ConsoleInput || (GetInput.UserChoice)choice > GetInput.UserChoice.End)
+        {
+          Console.WriteLine("We don't have these choice, please try again");
+          continue;
+        }
+        if((GetInput.UserChoice)choice == GetInput.UserChoice.End)
+        {
+          break;
+        }
+        IInputData someInput = GetInput.GetSomeInput(choice);
         if (someInput != null)
         {
           binaryTree = someInput.input();

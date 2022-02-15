@@ -6,11 +6,12 @@ namespace BuildingTree
 {
   static class GetInput
   {
-    enum UserChoice
+    public enum UserChoice
     {
       ConsoleInput = 1,
       FileInput,
       RandomInput,
+      End
     }
     static public IInputData GetSomeInput(int choice)
     {
