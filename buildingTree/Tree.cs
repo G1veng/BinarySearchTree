@@ -30,7 +30,6 @@ namespace BuildingTree
         {
           if (currentNode.GetLeft() != null)
           {
-            //currentNode.GetLeft().Add(data);
             AddInner(data, currentNode.GetLeft());
           }
           if (currentNode.GetLeft() == null)
@@ -44,7 +43,6 @@ namespace BuildingTree
         {
           if (currentNode.GetRight() != null)
           {
-            //firstNode.GetRight().Add(data);
             AddInner(data, currentNode.GetRight());
           }
           if (currentNode.GetRight() == null)
@@ -308,7 +306,6 @@ namespace BuildingTree
       {
         nesting++;
         ShowBinaryTreeInner(treeInString, currentNode.GetLeft());
-        //firstNode.GetLeft().ShowBinaryTreeInner(treeInString);
         nesting--;
       }
       if (currentNode.GetLeft() == null && nesting != maxNesting)
@@ -342,7 +339,6 @@ namespace BuildingTree
       {
         nesting++;
         ShowBinaryTreeInner(treeInString, currentNode.GetRight());
-        //firstNode.GetRight().ShowBinaryTreeInner(treeInString);
         nesting--;
       }
       if (currentNode.GetRight() == null && nesting != maxNesting)
@@ -394,14 +390,12 @@ namespace BuildingTree
       {
         nesting++;
         DepthOfTreeInner(currentNode.GetLeft());
-        //firstNode.GetLeft().DepthOfTree();
         nesting--;
       }
       if (currentNode.GetRight() != null)
       {
         nesting++;
         DepthOfTreeInner(currentNode.GetRight());
-        //firstNode.GetRight().DepthOfTree();
         nesting--;
       }
     }
