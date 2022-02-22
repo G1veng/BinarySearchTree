@@ -9,6 +9,7 @@ namespace BuildingTree
     private Node firstNode;
     static public int nesting = 0;
     static public int maxNesting = 0;
+
     public Tree()
     {
       firstNode = null;
